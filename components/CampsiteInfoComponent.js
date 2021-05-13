@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { render } from 'react-dom';
 import { Text, View } from 'react-native';
 import { Card } from 'react-native-elements';
 import { CAMPSITES } from '../shared/campsites';
