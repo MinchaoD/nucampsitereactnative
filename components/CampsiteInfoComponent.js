@@ -61,7 +61,7 @@ class CampsiteInfo extends Component {
     }
 
     markFavorite(){
-        this.setState({favorite: !this.state.favorite});
+        this.setState({favorite: !this.state.favorite});  //this code is to toggle heart back and forth
     }
 
     static navigationOptions = {
