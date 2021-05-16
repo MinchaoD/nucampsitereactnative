@@ -43,7 +43,7 @@ function RenderCampsite(props) {
                     color='#f50'
                     raised
                     reverse
-                    onPress={() => props.favorite ? console.log('Already set as a favorite') : props.markFavorite()} />
+                    onPress={() => props.markFavorite()} />
             </Card>
         );
     }
@@ -61,7 +61,7 @@ class CampsiteInfo extends Component {
     }
 
     markFavorite(){
-        this.setState({favorite: true});
+        this.setState({favorite: !this.state.favorite});
     }
 
     static navigationOptions = {
