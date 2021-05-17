@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
-import { Text, ScrollView } from 'react-native';
-import { FlatList } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import { Card } from 'react-native-elements';
-import { PARTNERS } from '../shared/partners'; 
+import { Text, ScrollView, FlatList } from 'react-native';
+import { Card, ListItem } from 'react-native-elements';
+import { connect } from 'react-redux';  // change 1 to redux: remove the import from shared/partners, because it is redux now and will get the data from redux instead
+import { baseUrl } from '../shared/baseUrl';
+
+const mapStateToProps = state => {   // change 2 to redux: add this mapstatetoprops is to get the data from redux
+    return  {
+        partners: state.partners
+    }
+}
 
 class Mission extends Component {
   
@@ -20,14 +25,7 @@ class Mission extends Component {
 }
 
 class About extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            partners: PARTNERS
-        };
-    }
 
-   
     static navigationOptions = {
         title: 'About Us'
     }
@@ -39,7 +37,7 @@ class About extends Component {
             <ListItem
                 title={item.name}
                 subtitle={item.description}
-                leftAvatar={{ source: require('./images/bootstrap-logo.png')}}
+                leftAvatar={{ source: {uri: baseUrl + item.image}}}
             />
         );
     };
@@ -49,7 +47,8 @@ class About extends Component {
             <Card 
             title="Community Partners">
             <FlatList
-            data={this.state.partners}
+            data={this.props.partners.partners}  // change 3 to redux: change the this.state.partners to this.props.partners.partner. 
+            // there are 2 partners here, is because in partners.js under redux folder, we defined partners include isLoading, errMess and partners.
             renderItem={renderPartner}
             keyExtractor={item => item.id.toString()}
             />
@@ -60,4 +59,4 @@ class About extends Component {
     }
 }
 
-export default About;
+export default connect(mapStateToProps)(About);  // change 4 to redux: add connect to make the state from redux will connect to about

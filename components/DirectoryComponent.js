@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import { FlatList } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import { CAMPSITES} from '../shared/campsites';
+import { Tile } from 'react-native-elements';
+import { connect } from 'react-redux'; 
+import { baseUrl } from '../shared/baseUrl';
+
+const mapStateToProps = state => {  
+    return  {
+        campsites: state.campsites,
+    }
+}
 
 class Directory extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            campsites: CAMPSITES
-        };
-    }
-
     static navigationOptions = {  //this is to set the method on the class itself instead of on the object
         title: 'Directory'  // // this will show on the screen header
     }
@@ -19,20 +19,21 @@ class Directory extends Component {
         const { navigate } = this.props.navigation;  //this.props.navigation is very useful, has goback, navigate, getParam, etc, here we only need navigate
         const renderDirectoryItem = ({item}) => {
         return (
-            <ListItem
+            <Tile  // use Tile here instead of ListItem, it is just another way to do
                 title={item.name}
-                subtitle={item.description}
+                caption={item.description}
+                featured
                 onPress={() => navigate('CampsiteInfo', {campsiteId: item.id})}  //this has 2 parameters, the first
                 // is the name of the navigation screen will go to, the 2nd parameter is optional, it sets when the 
                 //campsiteId is this listed item id.
-                leftAvatar={{ source: require('./images/react-lake.jpg')}}
+                imageSrc={{uri: baseUrl + item.image}}
             />
         );
     };
     
     return (
         <FlatList
-            data={this.state.campsites}
+            data={this.props.campsites.campsites}
             renderItem={renderDirectoryItem}
             keyExtractor={item => item.id.toString()}
         />
@@ -40,4 +41,4 @@ class Directory extends Component {
 }
 }
 
-export default Directory;
+export default connect(mapStateToProps)(Directory);

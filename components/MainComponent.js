@@ -10,6 +10,15 @@ import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
+import { connect } from 'react-redux';
+import { fetchCampsites, fetchComments, fetchPromotions, fetchPartners } from '../redux/ActionCreators';
+
+const mapDispatchToProps = {   // the changes to redux for this Main component are different from the changes to other component. Here use mapDispatchtoprops to pass the functions from redux
+    fetchCampsites,  // change 1 to redux
+    fetchComments,
+    fetchPromotions,
+    fetchPartners
+}
 
 const DirectoryNavigator = createStackNavigator(
     {
@@ -186,6 +195,13 @@ const AppNavigator = createAppContainer(MainNavigator);  // this is connect the 
 
 class Main extends Component { 
     
+    componentDidMount() {  // change 2 to redux. componentDidMount() is invoked immediately after a component is mounted. If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+        this.props.fetchCampsites();
+        this.props.fetchComments();
+        this.props.fetchPromotions();
+        this.props.fetchPartners();
+    }
+
     render() {
         return (
             <View style={{flex: 1,  // the below code is if platform is ios, then the top padding is 0, otherwise is the statusbarheight, it is not required but good to have.
@@ -225,4 +241,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);  // change 3 to redux. null is because there is no mapStateToProps, so set it to null. 
+// if there is no mapDispatchToProps, we can just leave it, no need null
