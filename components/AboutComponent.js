@@ -3,6 +3,7 @@ import { Text, ScrollView, FlatList } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';  // change 1 to redux: remove the import from shared/partners, because it is redux now and will get the data from redux instead
 import { baseUrl } from '../shared/baseUrl';
+import Loading from './LoadingComponent';
 
 const mapStateToProps = state => {   // change 2 to redux: add this mapstatetoprops is to get the data from redux
     return  {
@@ -41,6 +42,31 @@ class About extends Component {
             />
         );
     };
+
+    if (this.props.partners.isLoading) {
+        return (
+            <ScrollView>
+                <Mission />
+                <Card
+                    title='Community Partners'>
+                    <Loading />
+                </Card>
+            </ScrollView>
+        )
+    }
+    if (this.props.partners.errMess) {
+        return (
+            <ScrollView>
+            <Mission />
+            <Card
+                title='Community Partners'>
+                <Text>{this.props.partners.errMess}</Text>
+            </Card>
+        </ScrollView>
+
+        )
+    }
+
     return (
         <ScrollView>
             <Mission />
