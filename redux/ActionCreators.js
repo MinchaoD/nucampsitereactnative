@@ -141,3 +141,14 @@ export const addPartners = partners => ({
     type: ActionTypes.ADD_PARTNERS,
     payload: partners
 });
+
+export const postFavorite = campsiteId => dispatch => {
+    setTimeout(() => {
+        dispatch(addFavorite(campsiteId));
+    }, 2000); // this is to set up a mockup server delay for 2s
+};
+
+export const addFavorite = campsiteId => ({
+    type: ActionTypes.ADD_FAVORITE,
+    payload: campsiteId
+})

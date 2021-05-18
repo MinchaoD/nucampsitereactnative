@@ -4,9 +4,9 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 function Loading() {
     return (
         <View style = {styles.loadingView}> 
-            <ActivityIndicator size = 'large' color = '#563DD' /> 
+            <ActivityIndicator size = 'large' color = '#563DD' />  
             <Text style={styles.loadingText}> Loading ...</Text>
-        </View>
+        </View> // the ActivityIndicator is to show the rotating circle when loading
     );
 }
 
