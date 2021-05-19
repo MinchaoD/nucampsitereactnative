@@ -4,6 +4,8 @@ import { Card, Icon } from 'react-native-elements';
 import { connect } from 'react-redux'; 
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite } from '../redux/ActionCreators' // this is like the ones (fetch...) in the MainComponent.js
+import { Modal, Button, StyleSheet } from 'react-native'
+
 
 const mapStateToProps = state => {  
     return  {
@@ -50,13 +52,22 @@ function RenderCampsite(props) {
                 {/* here style is like css */}
                     {campsite.description}
                 </Text>
-                <Icon
-                    name={props.favorite ? 'heart' : 'heart-o'}
-                    type='font-awesome'
-                    color='#f50'
-                    raised
-                    reverse
-                    onPress={() => props.favorite ? console.log('Already set as a favorite') : props.markFavorite()} />
+                <View style={styles.cardRow}>
+                    <Icon
+                        name={props.favorite ? 'heart' : 'heart-o'}
+                        type='font-awesome'
+                        color='#f50'
+                        raised
+                        reverse
+                        onPress={() => props.favorite ? console.log('Already set as a favorite') : props.markFavorite()} />
+                    <Icon
+                        name='pencil'
+                        type='font-awesome'
+                        color='#5637DD'
+                        raised
+                        reverse
+                        onPress={() => props.onShowModal()} />
+                </View>
             </Card>
         );
     }
@@ -67,8 +78,15 @@ class CampsiteInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            favorite: false
+            favorite: false,
+            showModal: false
+                
+            }
         };
+    
+
+    toggleModal() {
+        this.setState({showModal: !this.state.showModal})
     }
 
     markFavorite(campsiteId){
@@ -87,11 +105,42 @@ class CampsiteInfo extends Component {
                 <ScrollView>
                     <RenderCampsite campsite={campsite}
                         favorite={this.props.favorites.includes(campsiteId)}  // this will return a boolean, true or false, to react with line 59.
-                        markFavorite={() => this.markFavorite(campsiteId)} />
+                        markFavorite={() => this.markFavorite(campsiteId)}
+                        onShowModal={() => this.toggleModal()} />
                     <RenderComments comments={comments} />
-                </ScrollView>)
+                    <Modal 
+                    animationType= {'slide'}  
+                    transparent={false}
+                    visible={this.state.showModal}
+                    onRequestClose={() => this.toggleModal()}>
+                        <View style={styles.modal}>
+                            <View style={{margin: 10}}>
+                                <Button 
+                                    onPress = {() => {
+                                        this.toggleModal();
+                                    
+                                    }}
+                                    color = '#808080'
+                                    title = 'Cancel' />
+                            </View>
+                        </View>
+                    </Modal>
+                </ScrollView>
+        )
     }
 }
+
+const styles = StyleSheet.create({
+    cardRow: {
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        margin: 20},
+    modal: {
+        justifyContent: 'center',
+        margin: 20
+    }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(CampsiteInfo);
 // the purpose of putting favorite in redux is to save the favorited campsiteId to state and stored. 
