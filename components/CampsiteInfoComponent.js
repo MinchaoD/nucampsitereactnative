@@ -3,7 +3,7 @@ import { Text, View, ScrollView, FlatList } from 'react-native';
 import { Card, Icon, Input, Rating } from 'react-native-elements';
 import { connect } from 'react-redux'; 
 import { baseUrl } from '../shared/baseUrl';
-import { postFavorite } from '../redux/ActionCreators' // this is like the ones (fetch...) in the MainComponent.js
+import { postFavorite, postComment } from '../redux/ActionCreators' // this is like the ones (fetch...) in the MainComponent.js
 import { Modal, Button, StyleSheet } from 'react-native'
 
 
@@ -16,7 +16,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-    postFavorite: campsiteId => (postFavorite(campsiteId))
+    postFavorite: campsiteId => (postFavorite(campsiteId)),
+    postComment: (campsiteId, rating, author, text) => (postComment(campsiteId, rating, author, text))
 }
 
 function RenderComments({comments}) {
@@ -96,8 +97,9 @@ class CampsiteInfo extends Component {
         this.setState({showModal: !this.state.showModal})
     }
 
-    handleComment(campsiteId) {
-        console.log(JSON.stringify(this.state));
+    handleComment(campsiteId) { 
+        console.log(JSON.stringify(this.state)),
+        this.props.postComment(campsiteId, this.state.rating, this.state.author, this.state.text),
         this.toggleModal()
 
     }
@@ -157,10 +159,9 @@ class CampsiteInfo extends Component {
                                 value= {this.state.text} />  
                             <View style={{marginBottom:20}}>
                                 <Button 
-                                    onPress = {() => {
-                                        this.handleComment();
+                                    onPress = {(campsiteId) => {   
+                                        this.handleComment(campsiteId);
                                         this.resetForm();
-                                    
                                     }}
                                     color = '#5637DD'
                                     title = 'SUBMIT' />
