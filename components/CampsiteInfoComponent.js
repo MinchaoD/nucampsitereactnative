@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Text, View, ScrollView, FlatList } from 'react-native';
+import { Text, View, ScrollView, FlatList, Alert, PanResponder } from 'react-native';
 import { Card, Icon, Input, Rating } from 'react-native-elements';
 import { connect } from 'react-redux'; 
 import { baseUrl } from '../shared/baseUrl';
@@ -52,9 +52,38 @@ function RenderComments({comments}) {
 
 function RenderCampsite(props) {
     const { campsite } = props; // it is destruct of props
+    const recognizeDrag = ({dx}) => (dx < -200) ? true: false;  //recognizeDrag here can be any name. dx is pan/swipe horizontally, if<-200, means from right to left. if dy means vertically pan.
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderEnd: (e, gestureState) => {  // gestureState here is the actual number for dx when doing the pan, like -300, which is <-200, then it trigger the Alert.
+            // e here is no use, but we have to have it so we can use the 2nd parameter gestureState
+            console.log('pan responder end', gestureState);
+            if (recognizeDrag(gestureState)) {
+                Alert.alert(
+                    'Add Favorite',
+                    'Are you sure you wish to add' + campsite.name +' to favorites?',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                            onPress: () => console.log('Cancel Pressed')
+                        },
+                        {
+                            text: 'OK',
+                            onPress: () => props.favorite ? console.log('Already set as a favorite') : props.markFavorite()
+                        }
+                    ],
+                    { cancelable: false }
+                )
+            }
+            return true; // it seems if no this line of code, it will work too.
+        }
+    })
+
     if (campsite) {
-        return (
-            <Animatable.View animation='fadeInDown' duration={2000} delay={1000}> 
+        return (  // below add {...panResponder.panHandlers} is to connect the panResponder from above to this component, so beside press on heart icon directly to make it 
+            // favorite, this pan method is another way to add favorite here
+            <Animatable.View animation='fadeInDown' duration={2000} delay={1000} {...panResponder.panHandlers}>   
                 <Card 
                     featuredTitle = {campsite.name}
                     image = {{uri: baseUrl + campsite.image}}>
