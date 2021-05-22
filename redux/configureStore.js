@@ -5,11 +5,21 @@ import { campsites } from './campsites';
 import { comments } from './comments';
 import { promotions } from './promotions';
 import { partners } from './partners';
-import { favorites } from './favorites'
+import { favorites } from './favorites';
+import { persistStore, persistCombineReducers } from 'redux-persist'; // need to install redux-persist first
+import storage from 'redux-persist/es/storage'; // in order to make persist store so we can save data on the client side, we need to
+// use redux-persist, we update this configureStore.js and App.js, that is it, no other files need to updated.
+
+
+const config = {
+    key: 'root',  // this is to connect App.js, root
+    storage,
+    debug: true  // this means turn on the debug logging
+}
 
 export const ConfigureStore = () => {
     const store = createStore(
-        combineReducers({
+        persistCombineReducers( config, {
             campsites,
             comments,
             partners,
@@ -19,5 +29,7 @@ export const ConfigureStore = () => {
         applyMiddleware(thunk, logger)
     );
 
-    return store;
+    const persistor = persistStore(store);
+
+    return { persistor, store };
 }
