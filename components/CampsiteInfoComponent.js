@@ -52,9 +52,20 @@ function RenderComments({comments}) {
 
 function RenderCampsite(props) {
     const { campsite } = props; // it is destruct of props
+
+    const view = React.createRef(); //Refs are commonly assigned to an instance property when a component is constructed so they can be referenced throughout the component.
+    // here use createRef to connect the rubberband animation to the component
+
     const recognizeDrag = ({dx}) => (dx < -200) ? true: false;  //recognizeDrag here can be any name. dx is pan/swipe horizontally, if<-200, means from right to left. if dy means vertically pan.
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
+
+        onPanResponderGrant: () => {  // added this line of code is to do between Panresponderstart and Panresponderend
+            view.current.rubberBand(1000) // rubberBand is a built in animation
+            .then(endState => console.log(endState.finished ?  'finished' : 'cancelled')) // here is just to show we can add any other function if we need, this console.log is not necessary just an example
+            // when the rubberBand animation is finished, it will console.log 'finished'
+        },
+
         onPanResponderEnd: (e, gestureState) => {  // gestureState here is the actual number for dx when doing the pan, like -300, which is <-200, then it trigger the Alert.
             // e here is no use, but we have to have it so we can use the 2nd parameter gestureState
             console.log('pan responder end', gestureState);
@@ -83,7 +94,13 @@ function RenderCampsite(props) {
     if (campsite) {
         return (  // below add {...panResponder.panHandlers} is to connect the panResponder from above to this component, so beside press on heart icon directly to make it 
             // favorite, this pan method is another way to add favorite here
-            <Animatable.View animation='fadeInDown' duration={2000} delay={1000} {...panResponder.panHandlers}>   
+            <Animatable.View 
+                animation='fadeInDown' 
+                duration={2000} 
+                delay={1000} 
+                ref={view} // here is to connect the ref for rubberband animation, it will apply on all the pans, including the ones are not dx <-200
+                {...panResponder.panHandlers}>   
+
                 <Card 
                     featuredTitle = {campsite.name}
                     image = {{uri: baseUrl + campsite.image}}>
