@@ -4,7 +4,7 @@ import { Tile } from 'react-native-elements';
 import { connect } from 'react-redux'; 
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent'
-
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {  
     return  {
@@ -21,15 +21,17 @@ class Directory extends Component {
         const { navigate } = this.props.navigation;  //this.props.navigation is very useful, has goback, navigate, getParam, etc, here we only need navigate
         const renderDirectoryItem = ({item}) => {
         return (
-            <Tile  // use Tile here instead of ListItem, it is just another way to do
-                title={item.name}
-                caption={item.description}
-                featured
-                onPress={() => navigate('CampsiteInfo', {campsiteId: item.id})}  //this has 2 parameters, the first
-                // is the name of the navigation screen will go to, the 2nd parameter is optional, it sets when the 
-                //campsiteId is this listed item id.
-                imageSrc={{uri: baseUrl + item.image}}
-            />
+            <Animatable.View animation='fadeInRightBig' duration={2000}> 
+                <Tile  // use Tile here instead of ListItem, it is just another way to do
+                    title={item.name}
+                    caption={item.description}
+                    featured
+                    onPress={() => navigate('CampsiteInfo', {campsiteId: item.id})}  //this has 2 parameters, the first
+                    // is the name of the navigation screen will go to, the 2nd parameter is optional, it sets when the 
+                    //campsiteId is this listed item id.
+                    imageSrc={{uri: baseUrl + item.image}}
+                />
+            </Animatable.View>
         );
     };
 

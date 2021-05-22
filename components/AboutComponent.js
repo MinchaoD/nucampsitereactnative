@@ -4,6 +4,7 @@ import { Card, ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';  // change 1 to redux: remove the import from shared/partners, because it is redux now and will get the data from redux instead
 import { baseUrl } from '../shared/baseUrl';
 import Loading from './LoadingComponent';
+import * as Animatable from 'react-native-animatable'; // use this library is easier that the animation built in react native
 
 const mapStateToProps = state => {   // change 2 to redux: add this mapstatetoprops is to get the data from redux
     return  {
@@ -46,40 +47,44 @@ class About extends Component {
     if (this.props.partners.isLoading) {
         return (
             <ScrollView>
-                <Mission />
-                <Card
-                    title='Community Partners'>
-                    <Loading />
-                </Card>
+               
+                    <Mission />
+                    <Card
+                        title='Community Partners'>
+                        <Loading />
+                    </Card>
             </ScrollView>
         )
     }
     if (this.props.partners.errMess) {
         return (
             <ScrollView>
-            <Mission />
-            <Card
-                title='Community Partners'>
-                <Text>{this.props.partners.errMess}</Text>
-            </Card>
-        </ScrollView>
+                <Animatable.View animation='fadeInDown' duration={2000} delay={1000}> 
+                    <Mission />
+                    <Card
+                        title='Community Partners'>
+                        <Text>{this.props.partners.errMess}</Text>
+                    </Card>
+                </Animatable.View>
+            </ScrollView>
 
         )
     }
 
     return (
         <ScrollView>
-            <Mission />
-            <Card 
-            title="Community Partners">
-            <FlatList
-            data={this.props.partners.partners}  // change 3 to redux: change the this.state.partners to this.props.partners.partner. 
-            // there are 2 partners here, is because in partners.js under redux folder, we defined partners include isLoading, errMess and partners.
-            renderItem={renderPartner}
-            keyExtractor={item => item.id.toString()}
-            />
-            </Card>
-            
+             <Animatable.View animation='fadeInDown' duration={2000} delay={1000}> 
+                <Mission />
+                <Card 
+                title="Community Partners">
+                <FlatList
+                data={this.props.partners.partners}  // change 3 to redux: change the this.state.partners to this.props.partners.partner. 
+                // there are 2 partners here, is because in partners.js under redux folder, we defined partners include isLoading, errMess and partners.
+                renderItem={renderPartner}
+                keyExtractor={item => item.id.toString()}
+                />
+                </Card>
+            </Animatable.View>
         </ScrollView>
     );
     }

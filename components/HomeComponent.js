@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Animated } from 'react-native';
+import { View, Text, Animated } from 'react-native'; // this animated comes with react-native, built in
 import { Card } from 'react-native-elements';
 import { connect } from 'react-redux'; 
 import { baseUrl } from '../shared/baseUrl';
@@ -52,8 +52,8 @@ class Home extends Component {
         };
     }
 
-    animate() {  //here animate can be any name
-        Animated.timing(
+    animate() {  //here animate can be any name, this custom animation is more like Zoom
+        Animated.timing(  
             this.state.scaleValue,
             {
                 toValue: 1,
