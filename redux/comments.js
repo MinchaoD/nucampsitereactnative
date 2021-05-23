@@ -10,8 +10,9 @@ export const comments = (state = { errMess: null, comments: []}, action) => {
             
         case ActionTypes.ADD_COMMENT:
             const comment = action.payload;
-            comment.id = state.length;
-            comment.date = new Date().toISOString();
+            comment.id = state.comments.length;  // the reason to add .id here is that in the original comments.js under shared or json server,
+            // there are id, campsiteId, author, text and date. All the others have been defined including date, we just need to define id here.
+            
             return {...state, comments: state.comments.concat(comment)};
         default:
             return state;
