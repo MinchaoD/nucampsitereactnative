@@ -210,7 +210,7 @@ class CampsiteInfo extends Component {
                                 value= {this.state.text} />  
                             <View style={{marginBottom:20}}>
                                 <Button 
-                                    onPress = {(campsiteId) => {   
+                                    onPress = {() => {   
                                         this.handleComment(campsiteId);
                                         this.resetForm();
                                     }}
