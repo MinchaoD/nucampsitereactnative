@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Animatable from 'react-native-animatable';
 
@@ -11,7 +11,6 @@ class Reservation extends Component {
             hikeIn: false,
             date: new Date(),
             showCalendar: false,
-            showModal: false
         }
     }
 
@@ -19,22 +18,13 @@ class Reservation extends Component {
         title: 'Reserve Campsite'
     }
 
-    toggleModal() {
-        this.setState({showModal: !this.state.showModal})
-    }
-
-    handleReservation () {
-        console.log(JSON.stringify(this.state));
-        this.toggleModal();
-    }
-
+   
     resetForm() {
         this.setState({  //after the handlreservation, set the state back to original data
             campers:1,
             hikeIn: false,
             date: new Date(),
             showCalendar: false,
-            showModal: false
         })
     }
     render() {
@@ -84,32 +74,30 @@ class Reservation extends Component {
                     style={styles.formItem}/> )}
                 <View style={styles.formRow}>
                     <Button
-                        onPress={() => this.handleReservation()}
                         title='Search'
                         color="#5637DD"
                         accessibilityLabel='Tap me to select a reservation date'
+                        onPress = {() => 
+                            Alert.alert(
+                                'Begin Search?',
+                                'Number of Camper: ' + this.state.campers +"\n" + 'Hike-In? ' + this.state.hikeIn + "\n" + 'Date: ' + this.state.date.toLocaleDateString('en-US'),
+                                [ 
+                                    {
+                                        text: 'Cancel',
+                                        onPress: () => this.resetForm(),
+                                        style: 'cancel' 
+                                    },
+                                    {
+                                        text: 'OK',
+                                        onPress: () => this.resetForm()
+                                    }
+                                ],
+                                {cancelable: false}  
+                            )}
                     />
                 </View>
                 </Animatable.View>
-                <Modal 
-                    animationType= {'slide'}  //set the modal slide from bottom to up
-                    transparent={false}
-                    visible={this.state.showModal}
-                    onRequestClose={() => this.toggleModal()}>
-                    <View style={styles.modal}>
-                        <Text style={styles.modalTitle}>Search</Text>
-                        <Text style={styles.modalText}>Number of Campers: {this.state.campers}</Text>
-                        <Text style={styles.modalText}>Hike-In? : {this.state.hikeIn ? 'Yes' : 'No'}</Text>
-                        <Text style={styles.modalText}>Date: {this.state.date.toLocaleDateString('en-US')}</Text>
-                        <Button 
-                            onPress = {() => {
-                                this.toggleModal();
-                                this.resetForm();
-                            }}
-                            color = '#5637DD'
-                            title = 'Close' />
-                    </View>
-                </Modal>
+                
                 
             </ScrollView>
         )
