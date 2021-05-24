@@ -56,6 +56,7 @@ function RenderCampsite(props) {
     const view = React.createRef(); //Refs are commonly assigned to an instance property when a component is constructed so they can be referenced throughout the component.
     // here use createRef to connect the rubberband animation to the component
 
+    const recognizeComment = ({dx}) => (dx > 200) ? true : false;  // dx >200 means from left to right, if > 200, then true
     const recognizeDrag = ({dx}) => (dx < -200) ? true: false;  //recognizeDrag here can be any name. dx is pan/swipe horizontally, if<-200, means from right to left. if dy means vertically pan.
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
@@ -87,6 +88,10 @@ function RenderCampsite(props) {
                     { cancelable: false }
                 )
             }
+            else if (recognizeComment(gestureState)){ // if recognizeComment which is from left to right and > 200, then open up the modal
+                props.onShowModal()
+            }
+
             return true; // it seems if no this line of code, it will work too.
         }
     })

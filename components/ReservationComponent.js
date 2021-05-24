@@ -81,6 +81,7 @@ class Reservation extends Component {
                             Alert.alert(
                                 'Begin Search?',
                                 'Number of Camper: ' + this.state.campers +"\n" + 'Hike-In? ' + this.state.hikeIn + "\n" + 'Date: ' + this.state.date.toLocaleDateString('en-US'),
+                                // it doesn't seem to work if write above code in multiple lines, using \n can help
                                 [ 
                                     {
                                         text: 'Cancel',
