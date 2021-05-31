@@ -20,7 +20,7 @@ class Reservation extends Component {
 
    
     resetForm() {
-        this.setState({  //after the handlreservation, set the state back to original data
+        this.setState({  //after the handlereservation, set the state back to original data
             campers:1,
             hikeIn: false,
             date: new Date(),
@@ -80,7 +80,7 @@ class Reservation extends Component {
                         onPress = {() => 
                             Alert.alert(
                                 'Begin Search?',
-                                'Number of Camper: ' + this.state.campers +"\n" + 'Hike-In? ' + this.state.hikeIn + "\n" + 'Date: ' + this.state.date.toLocaleDateString('en-US'),
+                                'Number of Camper: ' + this.state.campers + "\n" + 'Hike-In? ' + this.state.hikeIn + "\n" + 'Date: ' + this.state.date.toLocaleDateString('en-US'),
                                 // it doesn't seem to work if write above code in multiple lines, using \n can help
                                 [ 
                                     {

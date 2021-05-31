@@ -6,6 +6,7 @@ import About from './AboutComponent';
 import Contact from './ContactComponent';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoritesComponent';
+import Login from './LoginComponent';
 import { View, Platform, StyleSheet, Text, ScrollView, Image } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
@@ -85,6 +86,28 @@ const FavoritesNavigator = createStackNavigator(
             },
             headerLeft: <Icon
                 name='heart'
+                type='font-awesome'
+                iconStyle={styles.stackIcon}
+                onPress={() => navigation.toggleDrawer()}/>
+        })
+    }
+);
+
+const LoginNavigator = createStackNavigator(
+    {
+        Login: { screen: Login }
+    },
+    {
+        defaultNavigationOptions: ({navigation}) => ({
+            headerStyle: {
+                backgroundColor: '#5637DD'
+            },
+            headerTintColor: '#fff',
+            headerTitleStyle: {
+                color: '#fff'
+            },
+            headerLeft: <Icon
+                name='sign-in'
                 type='font-awesome'
                 iconStyle={styles.stackIcon}
                 onPress={() => navigation.toggleDrawer()}/>
@@ -185,6 +208,19 @@ const CustomDrawerContentComponent = props => (
 
 const MainNavigator = createDrawerNavigator(
     {
+        Login: { screen: LoginNavigator,
+            navigationOptions: {
+                drawerIcon: ({tintColor}) => ( // here drawerIcon and tintColor are all built in, can not be anyname,
+                    //tintColor is for when it is current, it will be blue, otherwise will be tinted as grey,
+                    // for the screen name like Home, Directory.. those tintColor features are built in, but for icons, we need to write tintColor
+                    <Icon
+                        name='sign-in'
+                        type='font-awesome'
+                        size={24}  //you can also write size and color in here instead of in stylesheet below
+                        color={tintColor} />
+                )
+
+            } },
         Home: { screen: HomeNavigator,
                 navigationOptions: {
                     drawerIcon: ({tintColor}) => ( // here drawerIcon and tintColor are all built in, can not be anyname,
@@ -259,6 +295,8 @@ const MainNavigator = createDrawerNavigator(
                    }},
     },
     {
+        initialRouteName: 'Home', // this is to set the Home screen as initial screen, if without this code, the initial screen will be the 
+        // Login screen because Login screen is listed before Home screen under createDrawernavigator
         drawerBackgroundColor: '#CEC8FF',
         contentComponent: CustomDrawerContentComponent  //this is add the custom drawer to this content, to replace the old one
     }
