@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import { Text, View, ScrollView, FlatList, Alert, PanResponder } from 'react-native';
+import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet, Alert, PanResponder, Share } from 'react-native';
 import { Card, Icon, Input, Rating } from 'react-native-elements';
 import { connect } from 'react-redux'; 
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, postComment } from '../redux/ActionCreators' // this is like the ones (fetch...) in the MainComponent.js
-import { Modal, Button, StyleSheet } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {  
@@ -94,7 +93,17 @@ function RenderCampsite(props) {
 
             return true; // it seems if no this line of code, it will work too.
         }
-    })
+    });
+
+    const shareCampsite = (title, message, url) => {
+        Share.share({
+            title,
+            message: `${title}: ${message} ${url}`,
+            url
+        }, {
+            dialogTitle: 'Share' + title  // this dialogtitle is only for Android
+        });
+    }
 
     if (campsite) {
         return (  // below add {...panResponder.panHandlers} is to connect the panResponder from above to this component, so beside press on heart icon directly to make it 
@@ -128,6 +137,14 @@ function RenderCampsite(props) {
                             raised
                             reverse
                             onPress={() => props.onShowModal()} />
+                        <Icon
+                            name='share'
+                            type='font-awesome'
+                            color='#5637DD'
+                            raised
+                            reverse
+                            onPress={() => shareCampsite(campsite.name, campsite.description, baseUrl + campsite.image)} /> 
+                            
                     </View>
                 </Card>
             </Animatable.View>
