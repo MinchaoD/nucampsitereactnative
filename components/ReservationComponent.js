@@ -42,11 +42,13 @@ class Reservation extends Component {
                     title: "Your Campsite Reservation Search",
                     body: `Search for ${date} requested`
                 },
-                trigger: null
+                trigger: null  //notification will be triggered immediately here, it can also set for some delays
             });
         }
 
         let permissions = await Notifications.getPermissionsAsync();
+        // await keyword can only be used inside an async function, it is similar as .then, followed by a promise
+        // here is to wait to get the permission
         if (!permissions.granted) {
             permissions = await Notifications.requestPermissionsAsync();
         }
@@ -119,7 +121,7 @@ class Reservation extends Component {
                                     {
                                         text: 'OK',
                                         onPress: () => {
-                                            this.presentLocalNotification(this.state.date.toLocaleDateString('en-US'));
+                                            this.presentLocalNotification(this.state.date.toLocaleDateString('en-US'));  //the async notification will be triggered here
                                             this.resetForm();
                                         }
                                     }
