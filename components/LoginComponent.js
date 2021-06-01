@@ -94,7 +94,7 @@ class Login extends Component {
         },
         formCheckbox: {
             margin: 10,
-            backgroundColor: null
+            backgroundColor: null  // it is to remove the default background color
         },
         formButton: {
             margin: 40
