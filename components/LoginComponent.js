@@ -6,6 +6,8 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { baseUrl } from '../shared/baseUrl';
+import * as ImageManipulator from 'expo-image-manipulator'
+import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
 
 
 class LoginTab extends Component {
@@ -135,7 +137,7 @@ class LoginTab extends Component {
         }
 
         getImageFromCamera = async () => {
-            const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+            const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);  //The await keyword in JavaScript can only be used inside an async function/method.
             const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);  
             // use cameraRollPermission separate from cameraPermission is because sometimes we don't need write to camera_roll such as using camera to scan sth.
             if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
@@ -145,9 +147,21 @@ class LoginTab extends Component {
                 });
                 if (!capturedImage.cancelled) {
                     console.log(capturedImage);
-                    this.setState({imageUrl: capturedImage.baseUrl});
+                    // this.setState({imageUrl: capturedImage.baseUrl});
+                    this.processImage(capturedImage.uri)  // this is to call the processImage function
                 }
             }
+        }
+
+        processImage = async (imgUri) => {
+            const processedImage = await ImageManipulator.manipulateAsync(
+                imgUri,
+                [{resize: {width:400}}],
+                { format: ImageManipulator.SaveFormat.PNG }
+            );
+            console.log(processedImage);
+            this.setState({imageUrl: processedImage.uri});
+        
         }
 
         handleRegister() {

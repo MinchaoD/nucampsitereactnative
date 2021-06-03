@@ -323,6 +323,7 @@ class Main extends Component {
         });
         // below code are for when changing the network, they are optional. The app works with just the above NetInfo.fetch code
         this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => { // we use this.unsub... is because it is for the parent scope
+            // above addEventListener function is to unsubscribe from network changes
             this.handleConnectivityChange(connectionInfo);
         });
     }
