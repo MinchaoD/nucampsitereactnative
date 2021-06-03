@@ -314,23 +314,29 @@ class Main extends Component {
         this.props.fetchPromotions();
         this.props.fetchPartners();
 
-        NetInfo.fetch().then(connectionInfo => { // we can use await async here instead of .then
+        this.showNetInfo();
+
+        // comment the below code is because we can test the showNetInfo 
+        // this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => { 
+        //     this.handleConnectivityChange(connectionInfo);
+        // });
+    }
+
+
+    showNetInfo = async () => {
+        const connectionInfo = await NetInfo.fetch(); // we can use await async here instead of .then
             (Platform.OS === 'ios')
             ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
             : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
             // here toastAndroid.Long is to show the message for 3.5, if toastAndroid.short then it is 2s
             
-        });
-        // below code are for when changing the network, they are optional. The app works with just the above NetInfo.fetch code
-        this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => { // we use this.unsub... is because it is for the parent scope
-            // above addEventListener function is to unsubscribe from network changes
-            this.handleConnectivityChange(connectionInfo);
-        });
-    }
+        };
 
-    componentWillUnmount() {
-        this.unsubscribeNetInfo();  //to stop listening for network changes when the main component amounts
-    }
+    
+
+    // componentWillUnmount() {
+    //     this.unsubscribeNetInfo();  
+    // }
 
     handleConnectivityChange = connectionInfo => {
         let connectionMsg = 'You are now connected to an active network.';
@@ -362,6 +368,7 @@ class Main extends Component {
         )
     }
 }
+
 
 const styles = StyleSheet.create({
     stackIcon: {
