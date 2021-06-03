@@ -152,6 +152,22 @@ class LoginTab extends Component {
             }
         }
 
+        getImageFromGallery = async () => { 
+            const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (cameraRollPermission.status === 'granted') {
+                const capturedImage = await ImagePicker.launchImageLibraryAsync({ // this is to pick an image from gallery/library
+                    allowsEditing: true,
+                    aspect: [1, 1]
+                });
+                if (!capturedImage.cancelled) {
+                console.log(capturedImage);
+                this.processImage(capturedImage.uri)
+            }
+
+            }  
+        }
+
+
         processImage = async (imgUri) => { //capturedImage.uri from above function will be passed down here through imgUri (which can be anyname)
             const processedImage = await ImageManipulator.manipulateAsync(
                 imgUri,
@@ -163,6 +179,7 @@ class LoginTab extends Component {
         
         }
 
+     
         handleRegister() {
             console.log(JSON.stringify(this.state));
             if (this.state.remember) {
@@ -190,6 +207,9 @@ class LoginTab extends Component {
                             <Button
                                 title='Camera'
                                 onPress={this.getImageFromCamera} />
+                            <Button
+                                title='Gallery'
+                                onPress={this.getImageFromGallery} />
                         </View>
                     </View>
                     <Input
