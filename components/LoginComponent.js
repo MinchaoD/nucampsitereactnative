@@ -140,12 +140,12 @@ class LoginTab extends Component {
             // use cameraRollPermission separate from cameraPermission is because sometimes we don't need write to camera_roll such as using camera to scan sth.
             if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
                 const capturedImage = await ImagePicker.launchCameraAsync({
-                    allowEditing: true,
+                    allowsEditing: true,
                     aspect: [1, 1]  // it is a square image and can be edited
                 });
                 if (!capturedImage.cancelled) {
                     console.log(capturedImage);
-                    this.setState({imageUrl: capturedImage.baseUrl});
+                    this.setState({imageUrl: capturedImage.baseuri});
                 }
             }
         }
