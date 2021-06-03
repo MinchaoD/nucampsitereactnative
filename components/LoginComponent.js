@@ -7,7 +7,6 @@ import * as Permissions from 'expo-permissions';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { baseUrl } from '../shared/baseUrl';
 import * as ImageManipulator from 'expo-image-manipulator'
-import { ScreenStackHeaderBackButtonImage } from 'react-native-screens';
 
 
 class LoginTab extends Component {
@@ -153,7 +152,7 @@ class LoginTab extends Component {
             }
         }
 
-        processImage = async (imgUri) => { //capturedImage.uri from above function will be passed down here through imgUri
+        processImage = async (imgUri) => { //capturedImage.uri from above function will be passed down here through imgUri (which can be anyname)
             const processedImage = await ImageManipulator.manipulateAsync(
                 imgUri,
                 [{resize: {width:400}}],  // this is to resize the capturedImage to width 400 and save as png file
