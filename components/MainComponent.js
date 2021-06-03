@@ -332,8 +332,6 @@ class Main extends Component {
             
         };
 
-    
-
     // componentWillUnmount() {
     //     this.unsubscribeNetInfo();  
     // }
