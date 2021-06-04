@@ -6,7 +6,8 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { baseUrl } from '../shared/baseUrl';
-import * as ImageManipulator from 'expo-image-manipulator'
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as MediaLibrary from 'expo-media-library'
 
 
 class LoginTab extends Component {
@@ -144,10 +145,13 @@ class LoginTab extends Component {
                     allowsEditing: true,
                     aspect: [1, 1]  // it is a square image and can be edited
                 });
+                
                 if (!capturedImage.cancelled) {
                     console.log(capturedImage);
+                    
                     // this.setState({imageUrl: capturedImage.uri});
-                    this.processImage(capturedImage.uri)  // this is to call the processImage function
+                    this.processImage(capturedImage.uri);  // this is to call the processImage function
+                    MediaLibrary.saveToLibraryAsync(capturedImage.uri)  // this is to save the captured image to the gallery/library, so it can be selected when getting image from gallery.
                 }
             }
         }
