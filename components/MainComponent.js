@@ -214,7 +214,7 @@ const MainNavigator = createDrawerNavigator(
             navigationOptions: {
                 drawerIcon: ({tintColor}) => ( // here drawerIcon and tintColor are all built in, can not be anyname,
                     //tintColor is for when it is current, it will be blue, otherwise will be tinted as grey,
-                    // for the screen name like Home, Directory.. those tintColor features are built in, but for icons, we need to write tintColor
+                    // for the screen name like Home, Directory.. those tintColor features are built in, but for icons, need to write tintColor
                     <Icon
                         name='sign-in'
                         type='font-awesome'
@@ -225,9 +225,7 @@ const MainNavigator = createDrawerNavigator(
             } },
         Home: { screen: HomeNavigator,
                 navigationOptions: {
-                    drawerIcon: ({tintColor}) => ( // here drawerIcon and tintColor are all built in, can not be anyname,
-                        //tintColor is for when it is current, it will be blue, otherwise will be tinted as grey,
-                        // for the screen name like Home, Directory.. those tintColor features are built in, but for icons, we need to write tintColor
+                    drawerIcon: ({tintColor}) => ( 
                         <Icon
                             name='home'
                             type='font-awesome'
@@ -316,21 +314,29 @@ class Main extends Component {
         this.props.fetchPromotions();
         this.props.fetchPartners();
 
-        this.showNetInfo()
+        // change the .then to async&await : 
 
+        // NetInfo.fetch().then(connectionInfo => { 
+        //     (Platform.OS === 'ios')
+        //     ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
+        //     : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
+        //     // here toastAndroid.Long is to show the message for 3.5, if toastAndroid.short then it is 2s
+            
+        // });
+
+        this.showNetInfo()
        }
 
        showNetInfo = async () => {
-        const connectionInfo = await NetInfo.fetch(); // we can use await async here instead of .then
+        const connectionInfo = await NetInfo.fetch(); //  can use await async here instead of .then
         (Platform.OS === 'ios')
         ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
         : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
-        // here toastAndroid.Long is to show the message for 3.5, if toastAndroid.short then it is 2s
-        
+        // here toastAndroid.Long is to show the message for 3.5, if toastAndroid.short then it is 2s 
     }; 
 
         // below code are for when changing the network, they are optional. The app works with just the above NetInfo.fetch code
-        // this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => { // we use this.unsub... is because it is for the parent scope
+        // this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => { //  use this.unsub... is because it is for the parent scope
         //     // above addEventListener function is to unsubscribe from network changes
         //     this.handleConnectivityChange(connectionInfo);
         
@@ -403,4 +409,4 @@ const styles = StyleSheet.create({
 })
 
 export default connect(null, mapDispatchToProps)(Main);  // change 3 to redux. null is because there is no mapStateToProps, so set it to null. 
-// if there is no mapDispatchToProps, we can just leave it, no need null
+// if there is no mapDispatchToProps, can just leave it, no need null
