@@ -308,39 +308,38 @@ const AppNavigator = createAppContainer(MainNavigator);  // this is connect the 
 
 class Main extends Component { 
     
-    componentDidMount() {  // change 2 to redux. componentDidMount() is invoked immediately after a component is mounted. If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+    componentDidMount() {  // componentDidMount() is invoked immediately after a component is mounted.
+        // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+       
         this.props.fetchCampsites();
         this.props.fetchComments();
         this.props.fetchPromotions();
         this.props.fetchPartners();
 
-        // NetInfo.fetch().then(connectionInfo => {
-        //     (Platform.OS === 'ios')
-        //     ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
-        //     : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
-          
-        // });
+        this.showNetInfo()
 
-        this.showNetInfo();
+       }
 
-        // comment the below code is because we can test the showNetInfo 
-        // this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => { 
-        //     this.handleConnectivityChange(connectionInfo);
-        // });
-    }
-
-
-    showNetInfo = async () => {
+       showNetInfo = async () => {
         const connectionInfo = await NetInfo.fetch(); // we can use await async here instead of .then
-            (Platform.OS === 'ios')
-            ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
-            : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
-            // here toastAndroid.Long is to show the message for 3.5, if toastAndroid.short then it is 2s
-            
-        };
+        (Platform.OS === 'ios')
+        ? Alert.alert('Initial Network Connectivity Type: ', connectionInfo.type)
+        : ToastAndroid.show('Initial Network Connectivity Type: ' + connectionInfo.type, ToastAndroid.LONG);
+        // here toastAndroid.Long is to show the message for 3.5, if toastAndroid.short then it is 2s
+        
+    }; 
+
+        // below code are for when changing the network, they are optional. The app works with just the above NetInfo.fetch code
+        // this.unsubscribeNetInfo = NetInfo.addEventListener(connectionInfo => { // we use this.unsub... is because it is for the parent scope
+        //     // above addEventListener function is to unsubscribe from network changes
+        //     this.handleConnectivityChange(connectionInfo);
+        
+    
+    
 
     // componentWillUnmount() {
-    //     this.unsubscribeNetInfo();  
+    //     this.unsubscribeNetInfo();  //to stop listening for network changes when the main component amounts
+    //     //componentWillUnmount() runs right before a component is unmounted
     // }
 
     handleConnectivityChange = connectionInfo => {
@@ -373,7 +372,6 @@ class Main extends Component {
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     stackIcon: {
