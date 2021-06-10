@@ -316,7 +316,7 @@ class Main extends Component {
         this.props.fetchPromotions();
         this.props.fetchPartners();
 
-       // change the .then to async&await : 
+       // change the .then to async&await: 
 
         // NetInfo.fetch().then(connectionInfo => { 
         //     (Platform.OS === 'ios')
